@@ -33,32 +33,22 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Remove Windows pre-installed MySQL
         run: rm -r -fo C:/mysql*
         if: contains( matrix.os, 'windows')
 
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@v7
+        uses: lukka/run-vcpkg@v10
         with:
-          setupOnly: true
-          vcpkgDirectory: ${{ github.workspace }}/vcpkg
-          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
-          vcpkgTriplet: ${{ matrix.triplet }}
-          additionalCachedPaths: ${{ github.workspace }}/build/vcpkg_installed
           vcpkgGitCommitId: 773516ecf6014d89cc69b11bb54605ad4be56694
 
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
 
       - name: Run CMake
-        uses: lukka/run-cmake@v3
-        with:
-          cmakeListsTxtPath: ${{ github.workspace }}/CMakeLists.txt
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ github.workspace }}/build
-          cmakeBuildType: ${{ matrix.buildtype }}
+        uses: lukka/run-cmake@v10
 
       - name: Copy artifacts
         shell: pwsh

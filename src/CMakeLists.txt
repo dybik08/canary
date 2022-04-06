@@ -52,6 +52,7 @@ else()
   log_option_disabled("openmp")
 endif()
 
+
 # === IPO ===
 check_ipo_supported(RESULT result OUTPUT output)
 if(result)
